@@ -10,11 +10,12 @@ Fiz este painel para reunir em uma janela simples as opções que estou portando
 
 ## Downloads
 
-Baixe os executáveis na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/tag/v1.1.0-standalone-beta.3):
+Baixe os arquivos na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/tag/v1.1.0-standalone-beta.4):
 
 - **DKRP-GRW-Panel.exe** — versão portátil. Baixe e abra; não precisa instalar o Cheat Engine nem deixar arquivos da tabela ao lado.
 - **DKRP-GRW-Panel-Setup.exe** — instalador para o perfil atual do Windows. Ele instala o painel em `%LOCALAPPDATA%\Programs\DK RP\Wildlands Panel` e cria atalhos.
 - **DKRP-GRW-Panel-Portable.zip** — cópia compactada do executável portátil.
+- **GRW_Atualizado_PTBR.CT** — tabela PT-BR para Cheat Engine; inclui a opção **PAINEL DK RP | Abrir painel standalone**. Essa opção abre o painel instalado e não depende da inicialização dos cheats da tabela.
 
 O programa inclui o runtime do .NET e é destinado ao Windows x64. O Windows SmartScreen pode exibir um aviso porque os binários não têm assinatura digital de editor.
 
@@ -27,11 +28,15 @@ O programa inclui o runtime do .NET e é destinado ao Windows x64. O Windows Sma
 
 O painel acessa a memória local de `GRW.exe` diretamente. Não usa nem inicia o Cheat Engine e não carrega a tabela `.CT`. A caixa solo/offline é uma confirmação do usuário; o programa não consegue determinar com certeza se a sessão está conectada a serviços online. Não use em partidas online.
 
+A opção de painel na tabela abre `%LOCALAPPDATA%\Programs\DK RP\Wildlands Panel\DKRP-GRW-Panel.exe`; instale o painel primeiro. O arquivo `.CT` pode ser carregado separadamente no Cheat Engine.
+
 ## Estado dos recursos
 
 Esta distribuição é experimental. A tela permite testar invencibilidade, invisibilidade, teleporte por marcador, velocidade, superpulo e NoClip. Os hooks e offsets foram portados para o executável independente, mas ainda não foram validados em uma sessão limpa da versão mais recente do jogo. Uma assinatura exata confirma apenas que os bytes esperados foram encontrados; não prova que um recurso funciona corretamente em jogo. Faça cópia dos saves antes de testar.
 
 O teleporte percorre o caminho em etapas e confere a posição no final, mas não consegue saber se todo destino está em terreno seguro. O NoClip também é experimental. Se uma opção causar comportamento estranho, desative-a e feche o painel para restaurar os bytes monitorados.
+
+O limite de minas, C4 e minas de proximidade ativos no mundo não foi removido. Não foi possível identificar e validar um campo ou rotina que controle esse limite nesta build; por isso, a tabela e o painel não anunciam munição explosiva ilimitada nem prometem que milhões de objetos permaneçam carregados. Tentar forçar esse número pode travar o jogo ou danificar o save.
 
 Aimbot, ESP, puxar veículos, desbloqueios, alterações de IA, nunca procurado, salvar manualmente, pular cenas e opções de munição/drone da tabela antiga não fazem parte do painel independente.
 
@@ -47,7 +52,7 @@ Requisitos: Windows x64 e .NET SDK 10.
 .\build-release.ps1
 ```
 
-O script cria o executável portátil, o ZIP, o instalador e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.3`. O código do instalador fica em `SetupApp`.
+O script cria o executável portátil, o ZIP com a tabela `.CT`, o instalador, a tabela individual e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.4`. O código do instalador fica em `SetupApp`.
 
 ## Diagnóstico e privacidade
 

@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "1.1.0-standalone-beta.3"
+    [string]$Version = "1.1.0-standalone-beta.4"
 )
 
 $ErrorActionPreference = "Stop"
@@ -30,6 +30,8 @@ New-Item -ItemType Directory -Path $zipStage | Out-Null
 Copy-Item -LiteralPath $appExe -Destination (Join-Path $zipStage "DKRP-GRW-Panel.exe")
 Copy-Item -LiteralPath (Join-Path $repo "README.md") -Destination $zipStage
 Copy-Item -LiteralPath (Join-Path $repo "LICENSE") -Destination $zipStage
+New-Item -ItemType Directory -Path (Join-Path $zipStage "Cheats") | Out-Null
+Copy-Item -LiteralPath (Join-Path $repo "Cheats\GRW_Atualizado_PTBR.CT") -Destination (Join-Path $zipStage "Cheats\GRW_Atualizado_PTBR.CT")
 Compress-Archive -Path (Join-Path $zipStage "*") -DestinationPath (Join-Path $out "DKRP-GRW-Panel-Portable.zip")
 
 $setupOut = Join-Path $out "setup-publish"
@@ -45,6 +47,9 @@ $assets = @(
     (Join-Path $out "DKRP-GRW-Panel-Setup.exe"),
     (Join-Path $out "DKRP-GRW-Panel-Portable.zip")
 )
+$ctAsset = Join-Path $out "GRW_Atualizado_PTBR.CT"
+Copy-Item -LiteralPath (Join-Path $repo "Cheats\GRW_Atualizado_PTBR.CT") -Destination $ctAsset
+$assets += $ctAsset
 $hashLines = foreach ($asset in $assets) {
     $hash = (Get-FileHash -LiteralPath $asset -Algorithm SHA256).Hash.ToLowerInvariant()
     "$hash  $([IO.Path]::GetFileName($asset))"
