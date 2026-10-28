@@ -1,65 +1,64 @@
-# DK RP · Ghost Recon Wildlands
+# DK RP · Painel para Ghost Recon Wildlands
 
 <p align="center">
-  <img src="Assets/wildlands-last-rites.jpg" alt="Imagem oficial de Ghost Recon Wildlands: Last Rites" width="760">
+  <img src="Assets/wildlands-last-rites.jpg" alt="Ghost Recon Wildlands" width="760">
 </p>
 
-<p align="center"><strong>Painel Windows em português · campanha solo/offline</strong><br>By: FranklinDKz (DK RP)</p>
+<p align="center"><strong>By: FranklinDKz (DK RP)</strong><br>Painel independente para Windows · uso em campanha solo</p>
 
-Painel WPF em preto e branco com acabamento glassmorphism, detecção de `GRW.exe`, seleção do executável, integração local com Cheat Engine x64, controles para os recursos presentes na tabela e Console LOG.
+Fiz este painel para reunir em uma janela simples as opções que estou portando para o meu jogo. A interface é em português, tem tema escuro com efeito de vidro, console de diagnóstico e duas formas de distribuição: executável portátil e instalador.
 
-## Estado e compatibilidade
+## Downloads
 
-- A Ubisoft anunciou **Last Rites** em agosto de 2026 como a atualização mais recente consultada para Wildlands. Ela adiciona ajustes nativos de dificuldade, percepção inimiga, resistência de veículos, composição da equipe e opções de reviver.
-- O `GRW.exe` detectado no computador do autor não expõe uma versão de produto no cabeçalho PE. A varredura estática local encontrou as 12 assinaturas da tabela uma vez cada no arquivo em disco, mas isso não valida o layout em memória nem certifica que a instalação está na versão mais recente. A Ubisoft não publica um hash oficial para comparação.
-- A tabela incluída foi revisada antes do lançamento Last Rites e suas assinaturas de memória não foram certificadas para essa atualização. Quando a inicialização falha ou a assinatura não confere, não habilite os recursos: o erro fica no Console LOG do Cheat Engine e os controles do painel permanecem indisponíveis. O projeto não promete funcionamento “100%”.
-- É necessário ter Cheat Engine x64 instalado. Ao clicar em **INJETAR**, o painel cria uma cópia temporária da tabela em `%LOCALAPPDATA%\DKRP\Wildlands`, abre o Cheat Engine, conecta o processo selecionado e tenta inicializar a entrada `INICIALIZAR`. Se o Cheat Engine pedir autorização para o Lua da tabela, confirme essa ação na janela dele.
-- Use apenas na campanha solo/offline. O painel não altera Ubisoft Connect, sincronização de contatos, serviços online, anticheat ou partidas com amigos.
+Baixe os executáveis na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/latest):
 
-> A faixa vermelha “Não foi possível sincronizar os contatos online” é um aviso do jogo/Ubisoft Connect. Ela não é gerada pelo painel nem pelo Cheat Engine. O painel não consegue corrigir nem suprimir uma falha de rede do jogo; seu próprio Console LOG registra separadamente problemas de conexão e de compatibilidade.
+- **DKRP-GRW-Panel.exe** — versão portátil. Baixe e abra; não precisa instalar o Cheat Engine nem deixar arquivos da tabela ao lado.
+- **DKRP-GRW-Panel-Setup.exe** — instalador para o perfil atual do Windows. Ele instala o painel em `%LOCALAPPDATA%\Programs\DK RP\Wildlands Panel` e cria atalhos.
+- **DKRP-GRW-Panel-Portable.zip** — cópia compactada do executável portátil.
 
-## Recursos do painel
+O programa inclui o runtime do .NET e é destinado ao Windows x64. O Windows SmartScreen pode exibir um aviso porque os binários não têm assinatura digital de editor.
 
-- Detecção do processo e seleção de `GRW.exe` quando não estiver aberto.
-- Ação **INJETAR** com Cheat Engine x64 e cópia temporária da tabela.
-- Ponte Lua local para ativar/desativar entradas pelo painel após validar a inicialização.
-- Console LOG com horário e mensagens do Cheat Engine.
-- Cartões para invencibilidade, invisibilidade, teleporte, velocidade, salto, NoClip experimental, munição, recuo, precisão e drone.
-- Diagnóstico do executável: metadados disponíveis e SHA-256 local.
-- QR Pix fornecido pelo autor e chave `dkpixscr@gmail.com`.
+## Como usar
 
-## Opções dentro do próprio jogo
+1. Abra Ghost Recon Wildlands e entre na campanha solo.
+2. Abra o painel e confirme a caixa de uso solo/offline.
+3. Clique em **INJETAR**. Se o jogo estiver aberto, o painel verifica as assinaturas antes de instalar qualquer hook. Se não estiver, escolha `GRW.exe`, abra o jogo e tente novamente.
+4. Consulte **Console LOG** para ver o resultado. Se a build não corresponder ou a validação falhar, o painel recusa a ativação.
 
-Last Rites já oferece opções oficiais que atendem parte do “PATCH DK RP”. Abra **Pausa → Opções → Dificuldade** para ajustar poder de fogo, resistência dos inimigos e dos veículos, percepção inimiga, atraso de regeneração e preset personalizado. A composição da equipe controla a quantidade de colegas IA; Ghost Parameters inclui opções de reviver. World and Session Settings oferece densidade de patrulhas, alerta máximo da Unidad e outros ajustes de sessão.
+O painel acessa a memória local de `GRW.exe` diretamente. Não usa nem inicia o Cheat Engine e não carrega a tabela `.CT`. A caixa solo/offline é uma confirmação do usuário; o programa não consegue determinar com certeza se a sessão está conectada a serviços online. Não use em partidas online.
 
-Essas opções são preferíveis a escrever valores internos sem endereço verificado. Aimbot, ESP, puxar/spawnar veículos, “nunca procurado”, desbloqueios globais, alterações de IA, pular cenas e salvamento manual/configurações não estão implementados nesta versão e não aparecem como botões falsos.
+## Estado dos recursos
 
-O teleporte existente percorre o destino em trechos e inclui pausas para dar tempo ao carregamento; não garante terreno válido em qualquer ponto. O NoClip permanece experimental e a travessia de colisões não foi validada. Se a validação da build falhar, a tabela deve ser desativada.
+Esta distribuição é experimental. A tela permite testar invencibilidade, invisibilidade, teleporte por marcador, velocidade, superpulo e NoClip. Os hooks e offsets foram portados para o executável independente, mas ainda não foram validados em uma sessão limpa da versão mais recente do jogo. Uma assinatura exata confirma apenas que os bytes esperados foram encontrados; não prova que um recurso funciona corretamente em jogo. Faça cópia dos saves antes de testar.
 
-## Compilar
+O teleporte percorre o caminho em etapas e confere a posição no final, mas não consegue saber se todo destino está em terreno seguro. O NoClip também é experimental. Se uma opção causar comportamento estranho, desative-a e feche o painel para restaurar os bytes monitorados.
 
-Requisitos: Windows 10/11 e .NET SDK 10.
+Aimbot, ESP, puxar veículos, desbloqueios, alterações de IA, nunca procurado, salvar manualmente, pular cenas e opções de munição/drone da tabela antiga não fazem parte do painel independente.
+
+### Assistência de mira
+
+No controle compatível, Wildlands tem Aim Assist nativo em **Pausa → Opções → Controller → Aim Assist**. A configuração sugerida é ligada. A Ubisoft documenta a ativação pelo menu Controller; não encontrei uma opção oficial equivalente para teclado e mouse nem uma variável de configuração externa que o painel possa alternar com segurança. Por isso, o painel mostra a orientação, mas não apresenta um liga/desliga fictício. [Ajuda oficial da Ubisoft](https://www.ubisoft.com/en-gb/help/ghost-recon-wildlands/gameplay/article/accessibility-features-in-ghost-recon-wildlands/000117014).
+
+## Compilar no Windows
+
+Requisitos: Windows x64 e .NET SDK 10.
 
 ```powershell
-dotnet publish .\GRW_DKRP_Panel.csproj -c Release -r win-x64 --self-contained true
+.\build-release.ps1
 ```
 
-O executável ficará em `bin\Release\net10.0-windows\win-x64\publish\DKRP-GRW-Panel.exe`. O Cheat Engine não é redistribuído; instale-o a partir do site oficial. A tabela e os recursos visuais precisam permanecer ao lado do painel na pasta publicada.
+O script cria o executável portátil, o ZIP, o instalador e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.2`. O código do instalador fica em `SetupApp`.
 
-## Arquivos e logs
+## Diagnóstico e privacidade
 
-- Tabela preservada no projeto: `Cheats/GRW_Atualizado_PTBR.CT`.
-- QR Pix: `Assets/pix-dk-rp.png` (imagem recebida do autor, incluída sem recodificar).
-- Imagem do jogo: `Assets/wildlands-last-rites.jpg`, hospedada pela Ubisoft e creditada em `ASSETS.md`.
-- Log da ponte: `%LOCALAPPDATA%\DKRP\Wildlands\cheat-engine.log`.
+O painel lê os metadados e calcula o SHA-256 local de `GRW.exe`; a Ubisoft não fornece um hash oficial para comparar. Portanto, o painel não declara que uma instalação é a versão mais recente só pelo nome ou hash do executável. O caminho e o hash aparecem na tela de diagnóstico. Os logs são mantidos na janela enquanto ela estiver aberta.
+
+O aviso de sincronização dos contatos online é exibido pelo jogo ou Ubisoft Connect. O painel não controla essa conexão e não consegue corrigir nem ocultar a mensagem.
+
+## Contribuir
+
+O QR Pix e a chave `dkpixscr@gmail.com` foram fornecidos por mim. A contribuição é opcional. A imagem do jogo pertence à Ubisoft e está incluída apenas como referência visual; veja [ASSETS.md](ASSETS.md).
 
 ## Licença
 
-Código e tabela sob GNU GPL v3.0. A licença não cobre Ghost Recon Wildlands, marcas/imagens da Ubisoft nem o QR de pagamento enviado pelo autor. Consulte `ASSETS.md`.
-
-## Créditos
-
-- FranklinDKz (DK RP).
-- Ubisoft, pela imagem oficial e pelas notas de atualização de Last Rites.
-- Cheat Engine, pela ponte Lua local documentada no próprio projeto.
-- `grw-scripthook` (GPL-3.0), referenciado na tabela para conferência de alguns layouts.
+O código-fonte deste projeto é distribuído sob GPL-3.0. A licença não cobre o jogo, marcas ou imagens da Ubisoft, nem o QR Pix. A biblioteca Iced usada para decodificar e realocar instruções x64 é distribuída sob MIT.

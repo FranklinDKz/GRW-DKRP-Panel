@@ -1,12 +1,11 @@
-# v1.0.0-preview
+# v1.1.0-standalone-beta
 
-Primeira distribuição pública do painel DK RP.
+Este beta substitui a prévia que chamava o Cheat Engine. O painel agora é um aplicativo Windows independente e não precisa de Cheat Engine instalado.
 
-- Aplicativo Windows autocontido, em português, com identidade visual glassmorphism.
-- Detecção de `GRW.exe`, escolha do executável, abertura do Cheat Engine x64, ponte Lua local e Console LOG.
-- Controles da tabela atual, cartão de compatibilidade e QR Pix informado pelo autor.
-- Inclui a tabela PT-BR preservada no projeto e a imagem oficial de Last Rites com atribuição.
+- Inclui executável portátil, instalador por usuário e arquivo ZIP portátil.
+- Reescreve o README em português e documenta o diagnóstico, limites conhecidos e uso offline.
+- Adiciona orientação para o Aim Assist nativo do controle. O painel não altera diretamente essa configuração nem implementa assistência para mouse e teclado.
+- Remove a tabela `.CT` antiga do pacote independente.
+- Os recursos de memória continuam experimentais e não foram validados em sessão limpa da versão atual do jogo.
 
-**Prévia:** as assinaturas da tabela foram encontradas no executável local em disco, mas o layout de memória e o funcionamento dos recursos não foram validados em uma sessão limpa da atualização Last Rites. Não use os controles se a inicialização não passar. O painel é somente para a campanha solo/offline.
-
-O aviso de sincronização de contatos mostrado pelo jogo vem do Ubisoft Connect e não pode ser removido por este painel.
+Use somente em campanha solo/offline. A opção de confirmação no painel não detecta o estado da sessão.

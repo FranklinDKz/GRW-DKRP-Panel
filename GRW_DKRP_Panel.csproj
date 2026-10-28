@@ -7,7 +7,7 @@
     <UseWPF>true</UseWPF>
     <AssemblyName>DKRP-GRW-Panel</AssemblyName>
     <RootNamespace>GRW_DKRP_Panel</RootNamespace>
-    <Version>1.0.0</Version>
+    <Version>1.1.0</Version>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -17,11 +17,13 @@
     <DebugSymbols>false</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="SetupApp/**/*.cs" />
+    <Page Remove="SetupApp/**/*.xaml" />
+    <ApplicationDefinition Remove="SetupApp/**/*.xaml" />
     <Resource Include="Assets\wildlands-last-rites.jpg" />
     <Resource Include="Assets\pix-dk-rp.png" />
-    <None Update="Cheats\**\*">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Iced" Version="1.21.0" />
   </ItemGroup>
 </Project>
