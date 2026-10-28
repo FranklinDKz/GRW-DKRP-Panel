@@ -28,7 +28,11 @@ public partial class MainWindow : Window
     [
         new("god", "Invencível", "Protege contra dano. Requer a captura do jogador."),
         new("stealth", "Invisível", "Patch com validação de bytes da build."),
-        new("teleport", "Teleporte", "Crie um marcador novo · NUMPAD 0 · rota em etapas."),
+        new("immunity", "Proteção contra explosões", "Recurso da tabela; requer dados de saúde capturados."),
+        new("ammo", "Munição ilimitada", "Ativa somente se a assinatura única da build for encontrada."),
+        new("clip", "Pente sem consumo", "Valida os três pontos de redução antes de manter o pente."),
+        new("droneBattery", "Bateria ilimitada do drone", "Patch curto com bytes originais conferidos."),
+        new("teleport", "Teleporte", "NUMPAD 0 · sobe, cruza em altitude e desce por etapas."),
         new("speed", "Supervelocidade", "Amplifica deslocamento do jogador."),
         new("jump", "Superpulo", "Salto vertical acionado ao pressionar Espaço."),
         new("noclip", "NoClip experimental", "WASD · Espaço sobe · Ctrl desce; colisão não validada.")

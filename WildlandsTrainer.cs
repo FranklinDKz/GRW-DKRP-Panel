@@ -8,6 +8,7 @@ internal sealed class WildlandsTrainer : IDisposable
 {
     private const string PlayerSignature = "40 53 48 83 EC ?? 0F 29 74 24 20 48 89 CB 0F 28 F1 E8 ?? ?? ?? ?? 80 BB ?? ?? ?? ?? 00 74 ?? 48";
     private const string MarkerSignature = "C6 83 A0 00 00 00 05 E8 ?? ?? ?? ?? 48 83 C4 40 5B C3";
+    private const uint KnownMarkerHookRva = 0x98EA965;
     private const int MarkerReadyOffset = 0xA0, MarkerCoordsOffset = 0x90, PlayerEntityOffset = 0x10, PlayerCoordsOffset = 0x50;
     private readonly ProcessMemory _memory;
     private readonly ulong _data;
@@ -28,6 +29,12 @@ internal sealed class WildlandsTrainer : IDisposable
         _memory = new ProcessMemory(pid);
         try
         {
+            if (KnownMarkerHookRva + 7 <= _memory.ModuleSize)
+            {
+                var oldHook = _memory.Read(_memory.ModuleBase + KnownMarkerHookRva, 7);
+                if (oldHook[0] == 0xE9 && oldHook[5] == 0x90 && oldHook[6] == 0x90)
+                    throw new InvalidOperationException("Já existe um hook de marcador ativo em GRW.exe. Feche o jogo completamente e abra-o de novo antes de injetar; não é seguro instalar outra captura sobre esse hook.");
+            }
             // Resolve every signature before the first patch so a mismatch leaves the game untouched.
             var playerSite = _memory.FindUnique(PlayerSignature);
             var markerSite = _memory.FindUnique(MarkerSignature);
@@ -64,6 +71,10 @@ internal sealed class WildlandsTrainer : IDisposable
         {
             case "god": SetGod(enabled); break;
             case "stealth": SetStealth(enabled); break;
+            case "immunity": SetImmunity(enabled); break;
+            case "ammo": SetAmmo(enabled); break;
+            case "clip": SetClip(enabled); break;
+            case "droneBattery": SetDroneBattery(enabled); break;
             case "speed": SetMotion("speed", enabled); break;
             case "jump": SetMotion("jump", enabled); break;
             case "noclip": SetMotion("noclip", enabled); break;
@@ -98,6 +109,60 @@ internal sealed class WildlandsTrainer : IDisposable
         byte[] patch = [0x45, 0x0F, 0x57, 0xC0, 0x90];
         if (enabled) _memory.Patch("stealth", address, original, patch);
         else _memory.Restore("stealth");
+    }
+
+    private void SetImmunity(bool enabled)
+    {
+        if (!enabled) { _memory.Restore("immunity"); return; }
+        var health = Pointer(_healthSlot);
+        if (health == 0) throw new InvalidOperationException("Volte ao personagem para capturar os dados de proteção.");
+        var address = health + 0x78UL;
+        if (!_enabled.Contains("immunity")) _memory.WriteTracked("immunity", address, [1]);
+        else if (_memory.ReadByte(address) != 1) _memory.Write(address, [1]);
+    }
+
+    private void SetAmmo(bool enabled)
+    {
+        if (!enabled) { _memory.Restore("ammo"); return; }
+        var site = _memory.FindUnique("48 8B 05 ?? ?? ?? ?? 48 85 C0 74 06 80 78 30 00 75 1A 0F B7 41 58");
+        var displacement = _memory.ReadInt32(site + 3);
+        var pointerAddress = unchecked((ulong)((long)site + 7 + displacement));
+        var config = Pointer(pointerAddress);
+        if (config == 0) throw new InvalidOperationException("Estrutura de munição ainda não carregada.");
+        var address = config + 0x30UL;
+        if (!_enabled.Contains("ammo")) _memory.WriteTracked("ammo", address, [1]);
+        else if (_memory.ReadByte(address) != 1) _memory.Write(address, [1]);
+    }
+
+    private void SetClip(bool enabled)
+    {
+        if (!enabled) { _memory.Restore("clip"); return; }
+        string[] patterns =
+        [
+            "80 78 30 00 75 1A 0F B7 41 58 66 85 C0",
+            "80 78 30 00 75 1D 0F B7 43 58 66 85 C0",
+            "40 38 70 30 75 16 0F B7 47 58 66 85 C0"
+        ];
+        try
+        {
+            foreach (var pattern in patterns)
+            {
+                var site = _memory.FindUnique(pattern) + 4;
+                _memory.Patch("clip", site, [0x75], [0xEB]);
+            }
+        }
+        catch
+        {
+            _memory.Restore("clip");
+            throw;
+        }
+    }
+
+    private void SetDroneBattery(bool enabled)
+    {
+        if (!enabled) { _memory.Restore("droneBattery"); return; }
+        var site = _memory.FindUnique("0F 28 F0 48 8B 5C 24 40 74 0D 48 C7 87 90 00 00 00 FF FF FF FF EB") + 8;
+        _memory.Patch("droneBattery", site, [0x74, 0x0D], [0x90, 0x90]);
     }
 
     private void SetMotion(string mode, bool enabled)
@@ -178,20 +243,42 @@ internal sealed class WildlandsTrainer : IDisposable
         var target = new[] { _memory.ReadFloat(marker + MarkerCoordsOffset), _memory.ReadFloat(marker + MarkerCoordsOffset + 4), _memory.ReadFloat(marker + MarkerCoordsOffset + 8) };
         if (!Valid([.. origin]) || !Valid([.. target])) throw new InvalidOperationException("Coordenadas inválidas.");
         var final = new[] { target[0], target[1], target[2] + 1.5f };
-        var dx = final[0] - origin[0]; var dy = final[1] - origin[1]; var dz = final[2] - origin[2];
-        var distance = Math.Sqrt(dx * dx + dy * dy + dz * dz);
-        var steps = Math.Max(1, (int)Math.Ceiling(distance / 75.0));
-        Log?.Invoke($"Teleporte: carregando rota de {distance:0} m em {steps} etapas.");
+        var transitZ = Math.Max(origin[2], target[2]) + 75f;
+        if (!float.IsFinite(transitZ) || Math.Abs(transitZ) > 1_000_000) throw new InvalidOperationException("Altitude de trânsito fora do intervalo aceito.");
+        var distance = Math.Sqrt(Math.Pow(final[0] - origin[0], 2) + Math.Pow(final[1] - origin[1], 2) + Math.Pow(final[2] - origin[2], 2));
+        var climbSteps = Math.Max(1, (int)Math.Ceiling(Math.Abs(transitZ - origin[2]) / 15.0));
+        var crossSteps = Math.Max(1, (int)Math.Ceiling(Math.Sqrt(Math.Pow(final[0] - origin[0], 2) + Math.Pow(final[1] - origin[1], 2)) / 75.0));
+        var descendSteps = Math.Max(1, (int)Math.Ceiling(Math.Abs(transitZ - final[2]) / 5.0));
+        Log?.Invoke($"Teleporte: subindo para altitude de trânsito, cruzando em {crossSteps} etapas e descendo em {descendSteps} etapas.");
         try
         {
-            for (var i = 1; i <= steps; i++)
+            void CheckRoute()
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 if (Process.GetProcessById(ProcessId).HasExited) throw new InvalidOperationException("GRW.exe encerrou durante o teleporte.");
                 if (Pointer(_markerSlot) != marker) throw new InvalidOperationException("O marcador mudou durante o carregamento.");
-                var t = (float)i / steps;
-                WritePosition(pos, origin[0] + dx * t, origin[1] + dy * t, origin[2] + dz * t);
+            }
+
+            for (var i = 1; i <= climbSteps; i++)
+            {
+                CheckRoute();
+                var t = (float)i / climbSteps;
+                WritePosition(pos, origin[0], origin[1], origin[2] + (transitZ - origin[2]) * t);
                 await Task.Delay(120, cancellationToken).ConfigureAwait(false);
+            }
+            for (var i = 1; i <= crossSteps; i++)
+            {
+                CheckRoute();
+                var t = (float)i / crossSteps;
+                WritePosition(pos, origin[0] + (final[0] - origin[0]) * t, origin[1] + (final[1] - origin[1]) * t, transitZ);
+                await Task.Delay(160, cancellationToken).ConfigureAwait(false);
+            }
+            for (var i = 1; i <= descendSteps; i++)
+            {
+                CheckRoute();
+                var t = (float)i / descendSteps;
+                WritePosition(pos, final[0], final[1], transitZ + (final[2] - transitZ) * t);
+                await Task.Delay(140, cancellationToken).ConfigureAwait(false);
             }
             await Task.Delay(650, cancellationToken).ConfigureAwait(false);
             var actualX = _memory.ReadFloat(pos); var actualY = _memory.ReadFloat(pos + 4); var actualZ = _memory.ReadFloat(pos + 8);

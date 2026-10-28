@@ -1,3 +1,11 @@
+# v1.1.0-standalone-beta.6
+
+- Porta para o painel munição ilimitada, pente sem consumo, bateria ilimitada do drone e proteção contra explosões, com validação das assinaturas/bytes antes de alterar memória.
+- Reorganiza o teleporte para subir a uma altitude de trânsito, avançar horizontalmente e descer em etapas; aplica a mesma rota à tabela `.CT`.
+- Remove do teleporte da tabela o limite fixo de 5 km, mantendo validação de coordenadas e interrupção segura.
+- Detecta o hook de marcador antigo que estava ativo na execução aberta e orienta reiniciar o jogo em vez de instalar captura sobre captura.
+- Continua sem aimbot, ESP, wallhack, hit kill, alterações de IA ou modificações online: não há rotinas validadas para esses recursos.
+
 # v1.1.0-standalone-beta.4
 
 - Adiciona à tabela PT-BR uma entrada independente para abrir o painel instalado.

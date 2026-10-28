@@ -646,6 +646,13 @@ local function resolve(log)
 end
 
 if GRWTP3 then fail('O teleporte revisado ja esta ativo em outra entrada desta tabela.') end
+local currentBase=getAddressSafe('GRW.exe')
+if currentBase then
+  local oldHook=readBytes(currentBase+0x98EA965,7,true)
+  if oldHook and #oldHook==7 and oldHook[1]==0xE9 and oldHook[6]==0x90 and oldHook[7]==0x90 then
+    fail('Ja existe um hook de marcador ativo nesta execucao. Feche GRW.exe completamente e abra o jogo novamente antes de instalar outra captura.')
+  end
+end
 local log = {}
 local ok, marker, player, external = pcall(resolve,log)
 if not ok then fail(tostring(marker) .. '\n\n' .. table.concat(log,'\n')) end
@@ -779,28 +786,42 @@ local hotkeyOK, hotkey = pcall(createHotkey, function()
     if not xyz or #xyz~=12 or not old or #old~=12 then error('Posicao inacessivel.') end
     local origin={readFloat(pos+0x50),readFloat(pos+0x54),readFloat(pos+0x58)}
     local target={readFloat(m+0x90),readFloat(m+0x94),readFloat(m+0x98)}
-    local dx,dy,dz=target[1]-origin[1],target[2]-origin[2],target[3]-origin[3]
-    local distance=math.sqrt(dx*dx+dy*dy+dz*dz)
-    if distance&gt;5000 then error('Marcador a mais de 5 km. Aproxime-o para carregar a area com seguranca.') end
-    local steps=math.max(1,math.ceil(distance/75))
-    print(string.format('Teleporte: carregando a rota em %d etapas...',steps))
+    local final={target[1],target[2],target[3]+1.5}
+    local transitZ=math.max(origin[3],target[3])+75
+    if transitZ~=transitZ or math.abs(transitZ)&gt;1000000 then error('Altitude de transito fora do intervalo aceito.') end
+    local dx,dy=final[1]-origin[1],final[2]-origin[2]
+    local distance=math.sqrt(dx*dx+dy*dy+(final[3]-origin[3])^2)
+    local climbSteps=math.max(1,math.ceil(math.abs(transitZ-origin[3])/15))
+    local crossSteps=math.max(1,math.ceil(math.sqrt(dx*dx+dy*dy)/75))
+    local descendSteps=math.max(1,math.ceil(math.abs(transitZ-final[3])/5))
+    print(string.format('Teleporte: subindo, cruzando em %d etapas e descendo em %d etapas...',crossSteps,descendSteps))
     local moved,moveError=pcall(function()
-      for i=1,steps do
+      local function checkRoute()
         if getOpenedProcessID()~=state.pid then error('Processo do jogo mudou durante o teleporte.') end
         if readBytes(m+0xA0,1)~=1 then error('Marcador mudou durante o carregamento.') end
-        local t=i/steps
-        if not writeFloat(pos+0x50,origin[1]+dx*t) or
-           not writeFloat(pos+0x54,origin[2]+dy*t) or
-           not writeFloat(pos+0x58,origin[3]+dz*t) then error('Falha ao gravar uma etapa.') end
-        sleep(180)
         local w=readFloat(pos+0x5C)
         if not w or math.abs(w-1)&gt;0.001 then error('A estrutura do jogador mudou durante o carregamento.') end
+      end
+      for i=1,climbSteps do
+        checkRoute();local t=i/climbSteps
+        if not writeFloat(pos+0x50,origin[1]) or not writeFloat(pos+0x54,origin[2]) or not writeFloat(pos+0x58,origin[3]+(transitZ-origin[3])*t) then error('Falha ao subir para a altitude de transito.') end
+        sleep(120)
+      end
+      for i=1,crossSteps do
+        checkRoute();local t=i/crossSteps
+        if not writeFloat(pos+0x50,origin[1]+dx*t) or not writeFloat(pos+0x54,origin[2]+dy*t) or not writeFloat(pos+0x58,transitZ) then error('Falha ao cruzar para o marcador.') end
+        sleep(160)
+      end
+      for i=1,descendSteps do
+        checkRoute();local t=i/descendSteps
+        if not writeFloat(pos+0x50,final[1]) or not writeFloat(pos+0x54,final[2]) or not writeFloat(pos+0x58,transitZ+(final[3]-transitZ)*t) then error('Falha ao descer sobre o marcador.') end
+        sleep(140)
       end
       sleep(700)
       local ax,ay,az=readFloat(pos+0x50),readFloat(pos+0x54),readFloat(pos+0x58)
       if not ax or not ay or not az then error('Posicao final indisponivel.') end
-      local planar=(target[1]-ax)^2+(target[2]-ay)^2
-      if planar&gt;625 or math.abs(target[3]-az)&gt;100 then error('A area nao estabilizou perto do marcador.') end
+      local planar=(final[1]-ax)^2+(final[2]-ay)^2
+      if planar&gt;625 or math.abs(final[3]-az)&gt;100 then error('A area nao estabilizou perto do marcador.') end
     end)
     if not moved then
       local restored=false
@@ -1412,5 +1433,5 @@ if syntaxcheck then return end
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols />
-  <Comments>GRW PT-BR — campanha solo/offline. Teleporte progressivo com limite de 5 km e validação final; pode levar alguns segundos. NoClip experimental grava coordenadas diretamente e ainda não teve colisão validada. Atalhos: Ctrl+Alt+F6 invencibilidade, Ctrl+Alt+F7 ocultação, Ctrl+Alt+F8 NoClip; NUMPAD 0 teleporte. Sem aimbot/ESP/NPC e sem funções online/anti-banimento.</Comments>
+  <Comments>GRW PT-BR — campanha solo/offline. O teleporte sobe para uma altitude de trânsito, cruza em etapas e desce gradualmente; pode levar alguns segundos e não garante colisão segura em todo terreno. NoClip experimental. Atalhos: Ctrl+Alt+F6 invencibilidade, Ctrl+Alt+F7 ocultação, Ctrl+Alt+F8 NoClip; NUMPAD 0 teleporte. Sem aimbot/ESP/wallhack/hit kill, alterações de NPC, funções online ou anti-banimento.</Comments>
 </CheatTable>
