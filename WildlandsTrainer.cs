@@ -54,7 +54,7 @@ internal sealed class WildlandsTrainer : IDisposable
             _memory.Hook("captura-jogador", playerSite, playerPrefix, playerHook);
             _memory.Hook("captura-marcador", markerSite, markerPrefix, markerHook);
             IsReady = true;
-            Log?.Invoke("Assinaturas únicas; captura local instalada. Mova o personagem e crie um marcador novo.");
+            Log?.Invoke("Assinaturas únicas; captura instalada. O destino será atualizado quando você colocar um marcador no mapa.");
         }
         catch
         {
@@ -79,7 +79,7 @@ internal sealed class WildlandsTrainer : IDisposable
             case "jump": SetMotion("jump", enabled); break;
             case "noclip": SetMotion("noclip", enabled); break;
             case "teleport":
-                if (enabled) Log?.Invoke("Teleporte pronto: coloque um marcador novo e use NUMPAD 0.");
+                if (enabled) Log?.Invoke("Teleporte ativado. Coloque um marcador uma vez; NUMPAD 0 reutiliza o último destino e marcadores novos o atualizam.");
                 else Log?.Invoke("Atalho de teleporte desativado.");
                 if (enabled) _enabled.Add(feature); else _enabled.Remove(feature);
                 return;
@@ -232,7 +232,7 @@ internal sealed class WildlandsTrainer : IDisposable
         var component = Pointer(_componentSlot);
         var marker = Pointer(_markerSlot);
         if (component == 0) throw new InvalidOperationException("Mova o personagem para capturá-lo antes de teleportar.");
-        if (marker == 0) throw new InvalidOperationException("Crie um marcador novo no mapa depois de ativar o painel.");
+        if (marker == 0) throw new InvalidOperationException("Ainda não há marcador capturado. Ative o teleporte, coloque um ponto uma vez no mapa e feche-o; depois NUMPAD 0 reutiliza esse destino.");
         var state = _memory.ReadByte(marker + MarkerReadyOffset);
         if (state is not (1 or 5)) throw new InvalidOperationException("O marcador ainda não está pronto. Feche o mapa e tente um ponto novo.");
         var entity = _memory.ReadUInt64(component + PlayerEntityOffset);

@@ -542,7 +542,7 @@ if GRWCore then GRWCore.disable('immunity') end
           <CheatEntries>
             <CheatEntry>
               <ID>910001</ID>
-              <Description>"TELEPORTE | Novo marcador → NUMPAD 0"</Description>
+              <Description>"TELEPORTE | Marcador → NUMPAD 0 (reutilizável)"</Description>
               <Color>50D050</Color>
               <VariableType>Auto Assembler Script</VariableType>
               <AssemblerScript>[ENABLE]
@@ -771,8 +771,9 @@ local hotkeyOK, hotkey = pcall(createHotkey, function()
     local p = playerStorage and readQword(playerStorage)
     local m = readQword('GRWTP3_Marker')
     if not p or p == 0 then error('Jogador ainda nao capturado. Volte ao jogo e movimente o personagem.') end
-    if not m or m == 0 then error('Crie um NOVO marcador no mapa depois de ativar o teleporte.') end
-    if readBytes(m+0xA0,1) ~= 1 then error('O marcador ainda nao esta pronto ou foi removido. Crie um ponto novo e feche o mapa.') end
+    if not m or m == 0 then error('Ainda nao foi capturado um marcador. Ative o teleporte, coloque um ponto uma vez no mapa e feche-o; depois use NUMPAD 0 quantas vezes quiser. Marcadores novos atualizam o destino automaticamente.') end
+    local markerState=readBytes(m+0xA0,1)
+    if markerState ~= 1 and markerState ~= 5 then error('O marcador capturado nao esta pronto ou foi removido. Coloque um ponto valido uma vez; nao e necessario remarcar entre teletransportes.') end
     local pos = readQword(p+0x10)
     if not pos or pos == 0 then error('Ponteiro de posicao invalido; offsets precisam ser confirmados.') end
     for offset=0,8,4 do
@@ -798,7 +799,8 @@ local hotkeyOK, hotkey = pcall(createHotkey, function()
     local moved,moveError=pcall(function()
       local function checkRoute()
         if getOpenedProcessID()~=state.pid then error('Processo do jogo mudou durante o teleporte.') end
-        if readBytes(m+0xA0,1)~=1 then error('Marcador mudou durante o carregamento.') end
+        local markerState=readBytes(m+0xA0,1)
+        if markerState~=1 and markerState~=5 then error('Marcador mudou durante o carregamento.') end
         local w=readFloat(pos+0x5C)
         if not w or math.abs(w-1)&gt;0.001 then error('A estrutura do jogador mudou durante o carregamento.') end
       end
@@ -839,7 +841,7 @@ if not hotkeyOK or not hotkey then
   fail('Falha ao criar o atalho: ' .. tostring(hotkey))
 end
 state.hotkey = hotkey
-print('GRWTP: ativo. Crie um novo marcador, feche o mapa e pressione NUMPAD 0.')
+print('GRWTP: ativo. Coloque um marcador uma vez e feche o mapa. NUMPAD 0 reutiliza o destino; cada novo marcador atualiza-o automaticamente.')
 {$asm}
 [DISABLE]
 {$lua}

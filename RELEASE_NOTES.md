@@ -1,3 +1,10 @@
+# v1.1.0-standalone-beta.7
+
+- Corrige a validação do marcador na tabela: aceita os estados 1 e 5, incluindo o estado 5 que a rotina identificada grava ao definir um destino.
+- Reutiliza o último marcador capturado com NUMPAD 0; colocar outro marcador atualiza o destino.
+- Atualiza mensagens de ativação/erro para explicar que basta colocar o marcador uma vez por destino.
+- O instalador agora gera arquivos beta.7 e mantém hashes SHA-256 dos binários e da tabela.
+
 # v1.1.0-standalone-beta.6
 
 - Porta para o painel munição ilimitada, pente sem consumo, bateria ilimitada do drone e proteção contra explosões, com validação das assinaturas/bytes antes de alterar memória.

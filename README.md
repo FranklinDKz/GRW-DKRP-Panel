@@ -10,7 +10,7 @@ Fiz este painel para reunir em uma janela simples as opções que estou portando
 
 ## Downloads
 
-Baixe os arquivos na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/tag/v1.1.0-standalone-beta.6):
+Baixe os arquivos na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/latest):
 
 - **DKRP-GRW-Panel.exe** — versão portátil. Baixe e abra; não precisa instalar o Cheat Engine nem deixar arquivos da tabela ao lado.
 - **DKRP-GRW-Panel-Setup.exe** — instalador para o perfil atual do Windows. Ele instala o painel em `%LOCALAPPDATA%\Programs\DK RP\Wildlands Panel` e cria atalhos.
@@ -36,9 +36,15 @@ A opção de painel na tabela abre `%LOCALAPPDATA%\Programs\DK RP\Wildlands Pane
 
 Esta distribuição é experimental. O painel oferece invencibilidade, invisibilidade, proteção contra explosões, munição ilimitada, pente sem consumo, bateria ilimitada do drone, teleporte por marcador, velocidade, superpulo e NoClip. Cada assinatura é conferida antes do patch; ainda assim, isso não prova que um recurso funciona corretamente em jogo. Faça cópia dos saves antes de testar.
 
-O teleporte agora sobe primeiro até uma altitude de trânsito, cruza em etapas e desce gradualmente sobre o marcador. Isso reduz o risco de atravessar relevo, mas não valida a colisão nem garante terreno seguro. O NoClip também é experimental. Se uma opção causar comportamento estranho, desative-a e feche o painel para restaurar os bytes monitorados.
+O teleporte sobe primeiro até uma altitude de trânsito, cruza em etapas e desce gradualmente sobre o marcador. Depois de capturado, o destino é reutilizado por NUMPAD 0; colocar outro marcador atualiza o destino automaticamente, sem ter de remarcar para cada teletransporte. Se o painel/tabela for ativado sem um marcador já capturado nessa execução do jogo, coloque o ponto uma vez e feche o mapa. Isso reduz o risco de atravessar relevo, mas não valida a colisão nem garante terreno seguro. O NoClip também é experimental. Se uma opção causar comportamento estranho, desative-a e feche o painel para restaurar os bytes monitorados.
 
 O limite de minas, C4 e minas de proximidade ativos no mundo não foi removido. Não foi possível identificar e validar um campo ou rotina que controle esse limite nesta build; por isso, a tabela e o painel não anunciam munição explosiva ilimitada nem prometem que milhões de objetos permaneçam carregados. Tentar forçar esse número pode travar o jogo ou danificar o save.
+
+### Complementos externos
+
+O [GRW ScriptHook Reforged](https://github.com/GameXueRen/grw-scripthook/releases/tag/v1.0-beta6) é um framework externo para plugins; não é incluído nem exigido pela tabela ou pelo painel DK RP. Nesta instalação local, os arquivos foram colocados ao lado de `GRW.exe` após validar o SHA-256 do pacote. Como o jogo estava aberto, o framework só poderá ser carregado após reiniciá-lo.
+
+Os mods [Visual Detection Modifier](https://www.nexusmods.com/ghostreconwildlands/mods/115) e [Ghost Ops](https://www.nexusmods.com/ghostreconwildlands/mods/123) são distribuídos pelos próprios autores no Nexus Mods e não estão incluídos neste pacote. O Nexus exige sessão para baixar os arquivos; por isso não instalei nem republicei esses arquivos. Consulte as instruções e compatibilidade nas páginas dos autores antes de usar. Não instale os dois juntos sem verificar conflitos: Ghost Ops altera percepção de inimigos e o Visual Detection Modifier também altera alcance de detecção.
 
 Alcance ampliado do drone, tiro sincronizado, progressão, pontos de habilidade/suprimentos, cronômetro, proteção de veículos, aimbot, ESP, wallhack, hit kill, invocação de veículos, desbloqueios, alterações de IA, nunca procurado, salvar manualmente e pular cenas não fazem parte do painel independente.
 
@@ -54,7 +60,7 @@ Requisitos: Windows x64 e .NET SDK 10.
 .\build-release.ps1
 ```
 
-O script cria o executável portátil, o ZIP com a tabela `.CT`, o instalador, a tabela individual e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.6`. O código do instalador fica em `SetupApp`.
+O script cria o executável portátil, o ZIP com a tabela `.CT`, o instalador, a tabela individual e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.7`. O código do instalador fica em `SetupApp`.
 
 ## Diagnóstico e privacidade
 
