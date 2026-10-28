@@ -10,7 +10,7 @@ Fiz este painel para reunir em uma janela simples as opções que estou portando
 
 ## Downloads
 
-Baixe os executáveis na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/tag/v1.1.0-standalone-beta.2):
+Baixe os executáveis na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/tag/v1.1.0-standalone-beta.3):
 
 - **DKRP-GRW-Panel.exe** — versão portátil. Baixe e abra; não precisa instalar o Cheat Engine nem deixar arquivos da tabela ao lado.
 - **DKRP-GRW-Panel-Setup.exe** — instalador para o perfil atual do Windows. Ele instala o painel em `%LOCALAPPDATA%\Programs\DK RP\Wildlands Panel` e cria atalhos.
@@ -47,7 +47,7 @@ Requisitos: Windows x64 e .NET SDK 10.
 .\build-release.ps1
 ```
 
-O script cria o executável portátil, o ZIP, o instalador e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.2`. O código do instalador fica em `SetupApp`.
+O script cria o executável portátil, o ZIP, o instalador e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.3`. O código do instalador fica em `SetupApp`.
 
 ## Diagnóstico e privacidade
 

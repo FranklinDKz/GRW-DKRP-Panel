@@ -22,6 +22,7 @@ public partial class MainWindow : Window
     private WildlandsTrainer? _trainer;
     private bool _busy;
     private bool _teleportKeyDown;
+    private bool _suppressFeatureEvents;
 
     private static readonly Feature[] PlayerFeaturesList =
     [
@@ -79,16 +80,20 @@ public partial class MainWindow : Window
 
     private async void FeatureToggle_Changed(object sender, RoutedEventArgs e)
     {
-        if (sender is not CheckBox check || check.Tag is not string key || _trainer is null) return;
+        if (_suppressFeatureEvents || sender is not CheckBox check || check.Tag is not string key || _trainer is null) return;
+        var trainer = _trainer;
+        var enabled = check.IsChecked == true;
         check.IsEnabled = false;
         try
         {
-            await Task.Run(() => _trainer.SetEnabled(key, check.IsChecked == true));
-            AddLog($"{key}: {(check.IsChecked == true ? "ativado" : "desativado")}.");
+            await Task.Run(() => trainer.SetEnabled(key, enabled));
+            AddLog($"{key}: {(enabled ? "ativado" : "desativado")}");
         }
         catch (Exception ex)
         {
-            check.IsChecked = !(check.IsChecked == true);
+            _suppressFeatureEvents = true;
+            check.IsChecked = !enabled;
+            _suppressFeatureEvents = false;
             AddLog($"Não foi possível alterar {key}: {ex.Message}");
         }
         finally { check.IsEnabled = _trainer is not null; }

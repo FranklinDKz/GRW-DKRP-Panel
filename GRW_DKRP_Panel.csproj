@@ -8,6 +8,7 @@
     <AssemblyName>DKRP-GRW-Panel</AssemblyName>
     <RootNamespace>GRW_DKRP_Panel</RootNamespace>
     <Version>1.1.0</Version>
+    <ApplicationIcon>Assets\dkrp.ico</ApplicationIcon>
     <PublishSingleFile>true</PublishSingleFile>
     <SelfContained>true</SelfContained>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -22,6 +23,7 @@
     <ApplicationDefinition Remove="SetupApp/**/*.xaml" />
     <Resource Include="Assets\wildlands-last-rites.jpg" />
     <Resource Include="Assets\pix-dk-rp.png" />
+    <Resource Include="Assets\dkrp.ico" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Iced" Version="1.21.0" />
