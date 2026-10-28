@@ -11,7 +11,7 @@ Painel WPF em preto e branco com acabamento glassmorphism, detecção de `GRW.ex
 ## Estado e compatibilidade
 
 - A Ubisoft anunciou **Last Rites** em agosto de 2026 como a atualização mais recente consultada para Wildlands. Ela adiciona ajustes nativos de dificuldade, percepção inimiga, resistência de veículos, composição da equipe e opções de reviver.
-- O `GRW.exe` detectado no computador do autor não expõe uma versão de produto no cabeçalho PE. O painel mostra o metadado disponível e o SHA-256 local, mas a Ubisoft não publica um hash oficial para comparação. **Não é possível confirmar apenas por esse arquivo se a instalação está na versão mais recente.**
+- O `GRW.exe` detectado no computador do autor não expõe uma versão de produto no cabeçalho PE. A varredura estática local encontrou as 12 assinaturas da tabela uma vez cada no arquivo em disco, mas isso não valida o layout em memória nem certifica que a instalação está na versão mais recente. A Ubisoft não publica um hash oficial para comparação.
 - A tabela incluída foi revisada antes do lançamento Last Rites e suas assinaturas de memória não foram certificadas para essa atualização. Quando a inicialização falha ou a assinatura não confere, não habilite os recursos: o erro fica no Console LOG do Cheat Engine e os controles do painel permanecem indisponíveis. O projeto não promete funcionamento “100%”.
 - É necessário ter Cheat Engine x64 instalado. Ao clicar em **INJETAR**, o painel cria uma cópia temporária da tabela em `%LOCALAPPDATA%\DKRP\Wildlands`, abre o Cheat Engine, conecta o processo selecionado e tenta inicializar a entrada `INICIALIZAR`. Se o Cheat Engine pedir autorização para o Lua da tabela, confirme essa ação na janela dele.
 - Use apenas na campanha solo/offline. O painel não altera Ubisoft Connect, sincronização de contatos, serviços online, anticheat ou partidas com amigos.
@@ -32,7 +32,7 @@ Painel WPF em preto e branco com acabamento glassmorphism, detecção de `GRW.ex
 
 Last Rites já oferece opções oficiais que atendem parte do “PATCH DK RP”. Abra **Pausa → Opções → Dificuldade** para ajustar poder de fogo, resistência dos inimigos e dos veículos, percepção inimiga, atraso de regeneração e preset personalizado. A composição da equipe controla a quantidade de colegas IA; Ghost Parameters inclui opções de reviver. World and Session Settings oferece densidade de patrulhas, alerta máximo da Unidad e outros ajustes de sessão.
 
-Essas opções são preferíveis a escrever valores internos sem endereço verificado. Aimbot, ESP, puxar/spawnar veículos, “nunca procurado”, desbloqueios globais e alterações de IA não estão implementados na tabela e não aparecem como botões falsos.
+Essas opções são preferíveis a escrever valores internos sem endereço verificado. Aimbot, ESP, puxar/spawnar veículos, “nunca procurado”, desbloqueios globais, alterações de IA, pular cenas e salvamento manual/configurações não estão implementados nesta versão e não aparecem como botões falsos.
 
 O teleporte existente percorre o destino em trechos e inclui pausas para dar tempo ao carregamento; não garante terreno válido em qualquer ponto. O NoClip permanece experimental e a travessia de colisões não foi validada. Se a validação da build falhar, a tabela deve ser desativada.
 
@@ -63,4 +63,3 @@ Código e tabela sob GNU GPL v3.0. A licença não cobre Ghost Recon Wildlands, 
 - Ubisoft, pela imagem oficial e pelas notas de atualização de Last Rites.
 - Cheat Engine, pela ponte Lua local documentada no próprio projeto.
 - `grw-scripthook` (GPL-3.0), referenciado na tabela para conferência de alguns layouts.
-

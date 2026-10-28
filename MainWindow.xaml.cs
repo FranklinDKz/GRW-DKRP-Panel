@@ -294,7 +294,7 @@ public partial class MainWindow : Window
         var escapedLog = logPath.Replace("\\", "\\\\").Replace("'", "\\'");
         var pipe = "DKRP_GRW_" + pid;
         var lua = $$"""
-            local function GRWPanelLog(message)
+            function GRWPanelLog(message)
               local f=io.open('{{escapedLog}}','a')
               if f then f:write(os.date('%H:%M:%S')..' | '..tostring(message)..'\n'); f:close() end
             end
@@ -335,7 +335,10 @@ public partial class MainWindow : Window
         foreach (var host in new[] { PlayerFeatures, UtilityFeatures })
             foreach (var child in host.Children)
                 if (child is Border { Child: Grid grid } && grid.Children.OfType<CheckBox>().FirstOrDefault() is { } check)
+                {
                     check.IsEnabled = ready;
+                    if (!ready) check.IsChecked = false;
+                }
     }
 
     private void ReadBridgeLog()
@@ -425,5 +428,3 @@ public partial class MainWindow : Window
         public void Dispose() { if (_library != IntPtr.Zero) NativeLibrary.Free(_library); }
     }
 }
-
-
