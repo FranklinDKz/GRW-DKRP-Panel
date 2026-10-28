@@ -10,7 +10,7 @@ Fiz este painel para reunir em uma janela simples as opções que estou portando
 
 ## Downloads
 
-Baixe os executáveis na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/latest):
+Baixe os executáveis na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-Panel/releases/tag/v1.1.0-standalone-beta.2):
 
 - **DKRP-GRW-Panel.exe** — versão portátil. Baixe e abra; não precisa instalar o Cheat Engine nem deixar arquivos da tabela ao lado.
 - **DKRP-GRW-Panel-Setup.exe** — instalador para o perfil atual do Windows. Ele instala o painel em `%LOCALAPPDATA%\Programs\DK RP\Wildlands Panel` e cria atalhos.
@@ -62,3 +62,4 @@ O QR Pix e a chave `dkpixscr@gmail.com` foram fornecidos por mim. A contribuiç�
 ## Licença
 
 O código-fonte deste projeto é distribuído sob GPL-3.0. A licença não cobre o jogo, marcas ou imagens da Ubisoft, nem o QR Pix. A biblioteca Iced usada para decodificar e realocar instruções x64 é distribuída sob MIT.
+

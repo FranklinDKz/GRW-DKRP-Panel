@@ -1,4 +1,4 @@
-# v1.1.0-standalone-beta
+# v1.1.0-standalone-beta.2
 
 Este beta substitui a prévia que chamava o Cheat Engine. O painel agora é um aplicativo Windows independente e não precisa de Cheat Engine instalado.
 
