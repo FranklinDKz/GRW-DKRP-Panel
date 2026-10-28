@@ -288,6 +288,61 @@ public partial class MainWindow : Window
         if (page == "Mods") ModsScroll.ScrollToTop();
     }
     private void ModsShortcut_Click(object sender, RoutedEventArgs e) => Nav_Click(new Button { Tag = "Mods" }, e);
+    private void OpenScriptHookMenu_Click(object sender, RoutedEventArgs e)
+    {
+        var process = Process.GetProcessesByName("GRW").FirstOrDefault(p => !p.HasExited);
+        if (process is null) { AddLog("Abra o GRW e entre na campanha antes de abrir os complementos."); return; }
+        try
+        {
+            var gameRoot = Path.GetDirectoryName(process.MainModule?.FileName ?? _gamePath)
+                ?? throw new InvalidOperationException("Não consegui localizar a pasta de GRW.exe.");
+            var loader = Path.Combine(gameRoot, "dinput8.dll");
+            var spawner = Path.Combine(gameRoot, "plugins", "spawner", "spawner.asi");
+            var skipIntro = Path.Combine(gameRoot, "plugins", "skipintro", "skipintro.asi");
+            if (!File.Exists(loader) || !File.Exists(spawner) || !File.Exists(skipIntro))
+            {
+                AddLog("ScriptHook/Spawner/SkipIntro não encontrados ao lado de GRW.exe. Instale o pacote oficial para usar este atalho.");
+                return;
+            }
+            if (process.StartTime.ToLocalTime() <= File.GetLastWriteTime(loader))
+            {
+                AddLog("O ScriptHook foi instalado depois que o jogo abriu. Feche e reinicie o GRW para carregar o catálogo de veículos e SkipIntro.");
+                return;
+            }
+            var hookLog = Path.Combine(gameRoot, "logs", "scripthook.log");
+            if (!File.Exists(hookLog))
+            {
+                AddLog("Não encontrei logs\\scripthook.log. Reinicie o GRW e verifique se o ScriptHook carregou.");
+                return;
+            }
+            var lines = File.ReadAllLines(hookLog);
+            var attach = Array.FindLastIndex(lines, line => line.Contains($"loader: attach pid={process.Id}", StringComparison.OrdinalIgnoreCase));
+            bool PluginLoaded(string plugin)
+            {
+                if (attach < 0) return false;
+                for (var i = attach; i < lines.Length - 1; i++)
+                    if (lines[i].Contains($"loading plugin: plugins\\{plugin}", StringComparison.OrdinalIgnoreCase))
+                        return lines[i + 1].Contains("loaded at", StringComparison.OrdinalIgnoreCase);
+                return false;
+            }
+            if (!PluginLoaded("spawner\\spawner.asi") || !PluginLoaded("skipintro\\skipintro.asi"))
+            {
+                AddLog("O ScriptHook desta sessão não confirmou o carregamento do Spawner e do SkipIntro. Consulte logs\\scripthook.log antes de continuar.");
+                return;
+            }
+            var hwnd = process.MainWindowHandle;
+            if (hwnd == IntPtr.Zero || !SetForegroundWindow(hwnd))
+            {
+                AddLog("Não consegui trazer o GRW para frente. Selecione a janela do jogo e pressione F4.");
+                return;
+            }
+            Thread.Sleep(120);
+            KeybdEvent(0x73, 0, 0, UIntPtr.Zero); // F4: menu raiz do ScriptHook
+            KeybdEvent(0x73, 0, 2, UIntPtr.Zero);
+            AddLog("F4 enviado ao jogo. No menu do ScriptHook, abra Veículos para escolher um modelo; SkipIntro fica nas opções do menu.");
+        }
+        catch (Exception ex) { AddLog("Não consegui abrir o menu do ScriptHook: " + ex.Message); }
+    }
     private void ClearLogs_Click(object sender, RoutedEventArgs e) => _logs.Clear();
     private void CopyPix_Click(object sender, RoutedEventArgs e)
     { try { Clipboard.SetText("dkpixscr@gmail.com"); AddLog("Chave Pix copiada."); } catch (Exception ex) { AddLog("Falha ao copiar chave Pix: " + ex.Message); } }
@@ -297,4 +352,6 @@ public partial class MainWindow : Window
     private sealed record Feature(string Key, string Name, string Hint);
 
     [System.Runtime.InteropServices.DllImport("user32.dll")] private static extern short GetAsyncKeyState(int key);
+    [System.Runtime.InteropServices.DllImport("user32.dll", SetLastError = true)] private static extern bool SetForegroundWindow(IntPtr hWnd);
+    [System.Runtime.InteropServices.DllImport("user32.dll", EntryPoint = "keybd_event", ExactSpelling = true)] private static extern void KeybdEvent(byte virtualKey, byte scanCode, uint flags, UIntPtr extraInfo);
 }

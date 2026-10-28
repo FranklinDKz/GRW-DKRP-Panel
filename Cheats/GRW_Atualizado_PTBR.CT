@@ -1435,5 +1435,5 @@ if syntaxcheck then return end
     </CheatEntry>
   </CheatEntries>
   <UserdefinedSymbols />
-  <Comments>GRW PT-BR — campanha solo/offline. O teleporte sobe para uma altitude de trânsito, cruza em etapas e desce gradualmente; pode levar alguns segundos e não garante colisão segura em todo terreno. NoClip experimental. Atalhos: Ctrl+Alt+F6 invencibilidade, Ctrl+Alt+F7 ocultação, Ctrl+Alt+F8 NoClip; NUMPAD 0 teleporte. Sem aimbot/ESP/wallhack/hit kill, alterações de NPC, funções online ou anti-banimento.</Comments>
+  <Comments>GRW PT-BR — campanha solo/offline. Teleporte reutiliza o último marcador; NUMPAD 0. Atalhos: Ctrl+Alt+F6 invencibilidade, Ctrl+Alt+F7 ocultação, Ctrl+Alt+F8 NoClip. Complementos instalados nesta máquina: após reiniciar GRW, abra o painel DK RP e use Mod menu > ABRIR MENU NO JOGO (F4); no menu do ScriptHook, escolha Veículos ou SkipIntro. Outros recursos pedidos (ESP/aimbot/hit kill, IA avançada, nunca procurado, desbloqueios, revives e minas ilimitadas) ainda não estão validados nesta build; a tabela não apresenta controles fictícios. Sem online/anti-banimento.</Comments>
 </CheatTable>

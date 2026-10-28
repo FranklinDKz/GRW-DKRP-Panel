@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "1.1.0-standalone-beta.7"
+    [string]$Version = "1.1.0-standalone-beta.9"
 )
 
 $ErrorActionPreference = "Stop"
@@ -32,6 +32,7 @@ Copy-Item -LiteralPath (Join-Path $repo "README.md") -Destination $zipStage
 Copy-Item -LiteralPath (Join-Path $repo "LICENSE") -Destination $zipStage
 New-Item -ItemType Directory -Path (Join-Path $zipStage "Cheats") | Out-Null
 Copy-Item -LiteralPath (Join-Path $repo "Cheats\GRW_Atualizado_PTBR.CT") -Destination (Join-Path $zipStage "Cheats\GRW_Atualizado_PTBR.CT")
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang") -Destination (Join-Path $zipStage "ScriptHook-Lang") -Recurse
 Compress-Archive -Path (Join-Path $zipStage "*") -DestinationPath (Join-Path $out "DKRP-GRW-Panel-Portable.zip")
 
 $setupOut = Join-Path $out "setup-publish"

@@ -42,7 +42,7 @@ O limite de minas, C4 e minas de proximidade ativos no mundo não foi removido. 
 
 ### Complementos externos
 
-O [GRW ScriptHook Reforged](https://github.com/GameXueRen/grw-scripthook/releases/tag/v1.0-beta6) é um framework externo para plugins; não é incluído nem exigido pela tabela ou pelo painel DK RP. Nesta instalação local, os arquivos foram colocados ao lado de `GRW.exe` após validar o SHA-256 do pacote. Como o jogo estava aberto, o framework só poderá ser carregado após reiniciá-lo.
+O [GRW ScriptHook Reforged](https://github.com/GameXueRen/grw-scripthook/releases/tag/v1.0-beta6) é um framework externo para plugins; não é incluído nem exigido pela tabela ou pelo painel DK RP. Nesta máquina, o framework e a tradução PT-BR foram instalados ao lado de `GRW.exe`; o idioma só aparece após reiniciar o GRW. Depois da reinicialização, o botão **ABRIR MENU NO JOGO · F4** no Mod menu abre o menu do ScriptHook. Lá, **Veículos** oferece o catálogo do plugin e **Pular vídeos de abertura** permite configurar os vídeos; o SkipIntro informa que mudanças entram em vigor após reiniciar o jogo. O ZIP desta distribuição inclui apenas os arquivos de tradução e o instalador da tradução, não as DLLs do ScriptHook.
 
 Os mods [Visual Detection Modifier](https://www.nexusmods.com/ghostreconwildlands/mods/115) e [Ghost Ops](https://www.nexusmods.com/ghostreconwildlands/mods/123) são distribuídos pelos próprios autores no Nexus Mods e não estão incluídos neste pacote. O Nexus exige sessão para baixar os arquivos; por isso não instalei nem republicei esses arquivos. Consulte as instruções e compatibilidade nas páginas dos autores antes de usar. Não instale os dois juntos sem verificar conflitos: Ghost Ops altera percepção de inimigos e o Visual Detection Modifier também altera alcance de detecção.
 
@@ -60,7 +60,7 @@ Requisitos: Windows x64 e .NET SDK 10.
 .\build-release.ps1
 ```
 
-O script cria o executável portátil, o ZIP com a tabela `.CT`, o instalador, a tabela individual e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.7`. O código do instalador fica em `SetupApp`.
+O script cria o executável portátil, o ZIP com a tabela `.CT`, o instalador, a tabela individual e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.9`. O código do instalador fica em `SetupApp`.
 
 ## Diagnóstico e privacidade
 

@@ -1,3 +1,16 @@
+# v1.1.0-standalone-beta.9
+
+- Traduz o menu principal do ScriptHook e os plugins instalados para português do Brasil.
+- Adiciona instalador de idioma que preserva o inglês/chinês, faz backup dos INIs e seleciona pt-BR.
+- Inclui no ZIP portable somente os arquivos de tradução (não inclui DLLs de terceiros).
+- Corrige a validação do botão F4: consulta `logs\\scripthook.log` e verifica se Spawner/SkipIntro carregaram no PID atual.
+
+# v1.1.0-standalone-beta.8
+
+- Adiciona ao painel o botão para abrir o menu F4 do ScriptHook, após verificar o carregador, os plugins, o processo e o log da sessão.
+- Expõe pelo complemento oficial as páginas de catálogo de veículos e SkipIntro; ambas dependem de reiniciar o jogo após a instalação.
+- Mantém a captura reutilizável do marcador e a validação dos estados 1 e 5.
+
 # v1.1.0-standalone-beta.7
 
 - Corrige a validação do marcador na tabela: aceita os estados 1 e 5, incluindo o estado 5 que a rotina identificada grava ao definir um destino.
