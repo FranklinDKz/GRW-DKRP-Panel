@@ -1,10 +1,14 @@
-# Tradução PT-BR do GRW ScriptHook Reforged
+# GRW ScriptHook Reforged em português do Brasil
 
-Tradução da interface principal e dos plugins que acompanham o pacote beta6. Não altera DLLs nem executáveis.
+Esta pasta contém a tradução do menu principal e dos plugins do ScriptHook Reforged 1.0-beta6, além do instalador do framework oficial e do idioma. A distribuição do ScriptHook permanece inalterada; créditos, GPL-3.0 e fonte correspondente estão em `THIRD_PARTY_NOTICES.md` e no instalador completo publicado na release.
 
-## Instalar
+## Instalação completa
 
-No PowerShell, execute a partir desta pasta:
+Baixe `DKRP-ScriptHook-PTBR-Instalador.zip` na página de Releases do painel e siga `README-Instalacao.md` (incluído como `LEIA-ME.md` no pacote). O instalador extrai o ScriptHook e configura o idioma PT-BR.
+
+## Apenas aplicar a tradução
+
+Se o ScriptHook já estiver instalado, execute no PowerShell:
 
 ```powershell
 .\Install-ptBR.ps1 -GameRoot "D:\SteamLibrary\steamapps\common\Wildlands"

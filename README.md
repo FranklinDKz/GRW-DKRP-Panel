@@ -16,6 +16,8 @@ Baixe os arquivos na página [Releases](https://github.com/FranklinDKz/GRW-DKRP-
 - **DKRP-GRW-Panel-Setup.exe** — instalador para o perfil atual do Windows. Ele instala o painel em `%LOCALAPPDATA%\Programs\DK RP\Wildlands Panel` e cria atalhos.
 - **DKRP-GRW-Panel-Portable.zip** — cópia compactada do executável portátil.
 - **GRW_Atualizado_PTBR.CT** — tabela PT-BR para Cheat Engine; inclui a opção **PAINEL DK RP | Abrir painel standalone**. Essa opção abre o painel instalado e não depende da inicialização dos cheats da tabela.
+- **DKRP-ScriptHook-PTBR-Instalador.zip** — instalação completa do ScriptHook Reforged beta6 com idioma PT-BR, backup dos arquivos substituídos e seletor da pasta do jogo.
+- **GRW-ScriptHook-Reforged-1.0-Beta6.zip** e **grw-scripthook-beedf74-source.zip** — pacote oficial inalterado e seu código-fonte correspondente, incluídos para transparência e conformidade com a GPL-3.0.
 
 O programa inclui o runtime do .NET e é destinado ao Windows x64. O Windows SmartScreen pode exibir um aviso porque os binários não têm assinatura digital de editor.
 
@@ -42,7 +44,7 @@ O limite de minas, C4 e minas de proximidade ativos no mundo não foi removido. 
 
 ### Complementos externos
 
-O [GRW ScriptHook Reforged](https://github.com/GameXueRen/grw-scripthook/releases/tag/v1.0-beta6) é um framework externo para plugins; não é incluído nem exigido pela tabela ou pelo painel DK RP. Nesta máquina, o framework e a tradução PT-BR foram instalados ao lado de `GRW.exe`; o idioma só aparece após reiniciar o GRW. Depois da reinicialização, o botão **ABRIR MENU NO JOGO · F4** no Mod menu abre o menu do ScriptHook. Lá, **Veículos** oferece o catálogo do plugin e **Pular vídeos de abertura** permite configurar os vídeos; o SkipIntro informa que mudanças entram em vigor após reiniciar o jogo. O ZIP desta distribuição inclui apenas os arquivos de tradução e o instalador da tradução, não as DLLs do ScriptHook.
+O [GRW ScriptHook Reforged](https://github.com/GameXueRen/grw-scripthook/releases/tag/v1.0-beta6) é um framework de terceiros para plugins. O pacote `DKRP-ScriptHook-PTBR-Instalador.zip` na release inclui o arquivo oficial beta6 sem modificações, a tradução PT-BR, um instalador com seletor da pasta do jogo, cópia de segurança dos arquivos substituídos, licença GPL-3.0 e o código-fonte correspondente. O instalador valida o SHA-256 do ZIP oficial antes de copiar. Após a instalação, reinicie o GRW; o botão **ABRIR MENU NO JOGO · F4** no Mod menu abre o menu do ScriptHook. Lá, **Veículos** oferece o catálogo do plugin e **Pular vídeos de abertura** permite configurar os vídeos. Recomendado somente na campanha solo/offline.
 
 Os mods [Visual Detection Modifier](https://www.nexusmods.com/ghostreconwildlands/mods/115) e [Ghost Ops](https://www.nexusmods.com/ghostreconwildlands/mods/123) são distribuídos pelos próprios autores no Nexus Mods e não estão incluídos neste pacote. O Nexus exige sessão para baixar os arquivos; por isso não instalei nem republicei esses arquivos. Consulte as instruções e compatibilidade nas páginas dos autores antes de usar. Não instale os dois juntos sem verificar conflitos: Ghost Ops altera percepção de inimigos e o Visual Detection Modifier também altera alcance de detecção.
 
@@ -60,7 +62,7 @@ Requisitos: Windows x64 e .NET SDK 10.
 .\build-release.ps1
 ```
 
-O script cria o executável portátil, o ZIP com a tabela `.CT`, o instalador, a tabela individual e os hashes SHA-256 em `artifacts\1.1.0-standalone-beta.9`. O código do instalador fica em `SetupApp`.
+O script cria o executável portátil, o ZIP com a tabela `.CT`, o instalador, o pacote de instalação do ScriptHook, o código-fonte de terceiros correspondente e hashes SHA-256 em `artifacts\1.1.0-standalone-beta.12`. O pacote oficial é baixado do release upstream e conferido por hash antes de ser incluído.
 
 ## Diagnóstico e privacidade
 

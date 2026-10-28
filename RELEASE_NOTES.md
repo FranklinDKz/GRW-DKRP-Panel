@@ -1,3 +1,21 @@
+# v1.1.0-standalone-beta.12
+
+- Inclui no GitHub o ScriptHook Reforged oficial beta6, seu código-fonte correspondente e a licença GPL-3.0.
+- Adiciona um instalador PT-BR que valida o pacote por SHA-256, permite selecionar a pasta do GRW e guarda cópias dos arquivos que substituir.
+- Separa claramente a tradução simples do instalador completo do ScriptHook.
+
+# v1.1.0-standalone-beta.11
+
+- Disponibiliza o ScriptHook Reforged oficial beta6 junto de um instalador PT-BR, com seletor da pasta do jogo, validação SHA-256 e backup de arquivos substituídos.
+- Inclui os arquivos de tradução, a licença GPL-3.0, avisos de terceiros e o código-fonte correspondente ao commit upstream `beedf74`.
+- Mantém separada a distribuição do painel e do ScriptHook; recomenda-se usar o framework apenas na campanha solo/offline.
+
+# v1.1.0-standalone-beta.10
+
+- Inclui o pacote oficial GRW ScriptHook Reforged beta6 no GitHub sem modificar seus binários.
+- Adiciona instalador PT-BR com seletor da pasta do jogo, validação SHA-256 e cópia de segurança de arquivos que serão substituídos.
+- Inclui tradução, licença GPL-3.0, avisos de terceiros e arquivo de código-fonte do commit upstream correspondente.
+
 # v1.1.0-standalone-beta.9
 
 - Traduz o menu principal do ScriptHook e os plugins instalados para português do Brasil.

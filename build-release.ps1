@@ -1,5 +1,5 @@
 param(
-    [string]$Version = "1.1.0-standalone-beta.9"
+    [string]$Version = "1.1.0-standalone-beta.12"
 )
 
 $ErrorActionPreference = "Stop"
@@ -15,6 +15,21 @@ if (Test-Path -LiteralPath $out) {
 
 New-Item -ItemType Directory -Path $out -Force | Out-Null
 New-Item -ItemType Directory -Path $payload -Force | Out-Null
+
+$hookZipName = "GRW-ScriptHook-Reforged-1.0-Beta6.zip"
+$hookZip = Join-Path $payload $hookZipName
+$hookSourceName = "grw-scripthook-beedf74-source.zip"
+$hookSource = Join-Path $payload $hookSourceName
+if (-not (Test-Path -LiteralPath $hookZip)) {
+    Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/GameXueRen/grw-scripthook/releases/download/v1.0-beta6/$hookZipName" -OutFile $hookZip
+}
+if (-not (Test-Path -LiteralPath $hookSource)) {
+    Invoke-WebRequest -UseBasicParsing -Uri "https://github.com/GameXueRen/grw-scripthook/archive/beedf74.zip" -OutFile $hookSource
+}
+$hookZipHash = (Get-FileHash -LiteralPath $hookZip -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($hookZipHash -ne "e712721902b8d1e403d08d69c2164c0ad3109c0bec130bc3c21f9162bff05b1e") { throw "O hash do pacote oficial do ScriptHook não confere; nenhum pacote será criado." }
+$hookSourceHash = (Get-FileHash -LiteralPath $hookSource -Algorithm SHA256).Hash.ToLowerInvariant()
+if ($hookSourceHash -ne "69038da0ba7816beb56fa9ab081c1f304a13535282e0eda1a3dfc30659238f9c") { throw "O hash do código-fonte correspondente ao ScriptHook não confere." }
 
 $portableDir = Join-Path $out "portable"
 $appPublish = Join-Path $portableDir "publish"
@@ -32,8 +47,27 @@ Copy-Item -LiteralPath (Join-Path $repo "README.md") -Destination $zipStage
 Copy-Item -LiteralPath (Join-Path $repo "LICENSE") -Destination $zipStage
 New-Item -ItemType Directory -Path (Join-Path $zipStage "Cheats") | Out-Null
 Copy-Item -LiteralPath (Join-Path $repo "Cheats\GRW_Atualizado_PTBR.CT") -Destination (Join-Path $zipStage "Cheats\GRW_Atualizado_PTBR.CT")
-Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang") -Destination (Join-Path $zipStage "ScriptHook-Lang") -Recurse
+$portableLang = Join-Path $zipStage "ScriptHook-Lang"
+New-Item -ItemType Directory -Path $portableLang | Out-Null
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\Install-ptBR.ps1") -Destination $portableLang
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\README.md") -Destination $portableLang
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\pt-BR") -Destination $portableLang -Recurse
 Compress-Archive -Path (Join-Path $zipStage "*") -DestinationPath (Join-Path $out "DKRP-GRW-Panel-Portable.zip")
+
+$hookBundle = Join-Path $out "scripthook-ptbr-stage"
+New-Item -ItemType Directory -Path $hookBundle | Out-Null
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\Install-ScriptHook-PTBR.ps1") -Destination $hookBundle
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\Install-ptBR.ps1") -Destination $hookBundle
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\README-Instalacao.md") -Destination (Join-Path $hookBundle "LEIA-ME.md")
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\THIRD_PARTY_NOTICES.md") -Destination $hookBundle
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\GRW-ScriptHook-LICENSE-GPL-3.0.txt") -Destination $hookBundle
+Copy-Item -LiteralPath $hookZip -Destination $hookBundle
+Copy-Item -LiteralPath $hookSource -Destination $hookBundle
+Copy-Item -LiteralPath (Join-Path $repo "ScriptHook-Lang\pt-BR") -Destination $hookBundle -Recurse
+$hookInstallerZip = Join-Path $out "DKRP-ScriptHook-PTBR-Instalador.zip"
+Compress-Archive -Path (Join-Path $hookBundle "*") -DestinationPath $hookInstallerZip
+Copy-Item -LiteralPath $hookZip -Destination (Join-Path $out $hookZipName)
+Copy-Item -LiteralPath $hookSource -Destination (Join-Path $out $hookSourceName)
 
 $setupOut = Join-Path $out "setup-publish"
 dotnet publish (Join-Path $repo "SetupApp\DKRP-GRW-Panel-Setup.csproj") -c Release -r win-x64 --self-contained true -o $setupOut
@@ -46,7 +80,10 @@ Copy-Item -LiteralPath $setupExe -Destination (Join-Path $out "DKRP-GRW-Panel-Se
 $assets = @(
     (Join-Path $out "DKRP-GRW-Panel.exe"),
     (Join-Path $out "DKRP-GRW-Panel-Setup.exe"),
-    (Join-Path $out "DKRP-GRW-Panel-Portable.zip")
+    (Join-Path $out "DKRP-GRW-Panel-Portable.zip"),
+    $hookInstallerZip,
+    (Join-Path $out $hookZipName),
+    (Join-Path $out $hookSourceName)
 )
 $ctAsset = Join-Path $out "GRW_Atualizado_PTBR.CT"
 Copy-Item -LiteralPath (Join-Path $repo "Cheats\GRW_Atualizado_PTBR.CT") -Destination $ctAsset
