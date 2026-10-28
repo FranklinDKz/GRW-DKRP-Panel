@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
     <AssemblyName>DKRP-GRW-Panel-Setup</AssemblyName>
+    <ApplicationIcon>..\Assets\dkrp.ico</ApplicationIcon>
     <Version>1.1.0</Version>
     <RootNamespace>DKRP.GRW.Panel.Setup</RootNamespace>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
@@ -21,3 +22,5 @@
     <EmbeddedResource Include="..\artifacts\payload\DKRP-GRW-Panel.exe" LogicalName="DKRP.GRW.Panel.Payload.exe" />
   </ItemGroup>
 </Project>
+
+
